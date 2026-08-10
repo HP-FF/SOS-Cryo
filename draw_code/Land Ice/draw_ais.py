@@ -50,6 +50,15 @@ th95_Ho_66u = np.percentile(value_66up[1:59],5)
 th95_Ho_90d = np.percentile(value_90down[1:59],5)
 th95_Ho_90u = np.percentile(value_90up[1:59],5)
 
+Ho_90_5UP = np.percentile(value_90up[1:59],5)
+Ho_90_5LOW = np.percentile(value_90down[1:59],5)
+mid_90_5up = np.percentile(value_90up[25:35],5)
+mid_90_5low = np.percentile(value_90down[25:35],5)
+print("Ho_90_5up:{}".format(Ho_90_5UP))
+print("Ho_90_5low:{}".format(Ho_90_5LOW))
+print("Mid_90_5up:{}".format(mid_90_5up))
+print("Mid_90_5low:{}".format(mid_90_5low))
+
 th95_Mid = np.percentile(median[25:35],5)
 th95_Mid_66d = np.percentile(value_66down[25:35],5)
 th95_Mid_66u = np.percentile(value_66up[25:35],5)
@@ -81,18 +90,18 @@ font_style={'family':'Times New Roman',
             'size':12}
 
 
-x_pos = -3.4
-y_min,y_max = ais_mean1[-1]-6*0.3625,ais_mean1[-1]-0.05*0.3625
-center = (y_min + y_max) / 2
-lower_err = center - y_min
-upper_err = y_max - center
-ax1.errorbar(x=[x_pos], y=[center],
-             yerr=[[lower_err], [upper_err]],
-             fmt='none',
-             ecolor='#d57eeb',
-             label='Committed change with credible interval',
-             capsize=5,
-             elinewidth=2)
+# x_pos = -3.4
+# y_min,y_max = ais_mean1[-1]-6*0.3625,ais_mean1[-1]-0.05*0.3625
+# center = (y_min + y_max) / 2
+# lower_err = center - y_min
+# upper_err = y_max - center
+# ax1.errorbar(x=[x_pos], y=[center],
+#              yerr=[[lower_err], [upper_err]],
+#              fmt='none',
+#              ecolor='#d57eeb',
+#              label='Committed change with credible interval',
+#              capsize=5,
+#              elinewidth=2)
 
 ax1.set_ylabel('Ice volume (10^6 Gt)',font=font_style)  # y_label
 

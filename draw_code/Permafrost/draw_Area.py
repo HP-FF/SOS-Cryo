@@ -70,17 +70,20 @@ if __name__ == "__main__":
         name = os.path.basename(expath).split('_')[0] + ' ($10^6\ km^2$)'  # Y
 
         ex_data = pd.read_excel(expath)
-        x_axis_data = ex_data['time'].tolist()  # time
-        y_axis_data = ex_data['data'].tolist()  # mean
-
-        x_h, y_h, x_n, y_n = one_2_tow(x_axis_data, y_axis_data)
-
-        # 压缩时间
-        if x_h is None:
-            x_n = transform_years(x_n, zoom_factor, bias)
+        if os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+            x_axis_data = ex_data['time'].tolist()  # time
+            x_n = transform_years(x_axis_data, zoom_factor, bias)
         else:
-            x_n = transform_years(x_n, zoom_factor, bias)
-            x_h = transform_years(x_h, zoom_factor, bias)
+            x_axis_data = ex_data['time'].tolist()  # time
+            y_axis_data = ex_data['data'].tolist()  # mean
+            x_h, y_h, x_n, y_n = one_2_tow(x_axis_data, y_axis_data)
+
+            # 压缩时间
+            if x_h is None:
+                x_n = transform_years(x_n, zoom_factor, bias)
+            else:
+                x_n = transform_years(x_n, zoom_factor, bias)
+                x_h = transform_years(x_h, zoom_factor, bias)
 
         if os.path.basename(expath).split('_')[1].split('.')[0] == 'CESM2':
 
@@ -93,7 +96,7 @@ if __name__ == "__main__":
             x0 = x_h[0]
 
             if color_index == 0:
-                plt.plot(x_h, y_h, c='#2626ff', linestyle='-', alpha=0.8, linewidth=2,label='CESM2 mid-Holocene and historical series')
+                plt.plot(x_h, y_h, c='#2626ff', linestyle='-', alpha=0.8, linewidth=2, label='CESM2 mid-Holocene and historical series')
                 plt.plot(x_n, y_n, c='#2626ff', linestyle='-', alpha=0.8, linewidth=2)
 
                 ax = plt.gca()
@@ -134,19 +137,31 @@ if __name__ == "__main__":
                 plt.plot(x_n, y_n, c='#0b0b0b', linestyle='-', alpha=0.8, linewidth=2, label='ISIMIP multimodel mean, 1850-2014')
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'gfdl-esm4':
-                plt.plot(x_n,y_n,c='#d3d3d3',linestyle='-', alpha=0.6, linewidth=1, label='ISIMIP individual simulations, 1850-2014')
+                plt.plot(x_n,y_n,c='#d3d3d3',linestyle='-', alpha=0.6, linewidth=1.2, label='ISIMIP individual simulations, 1850-2014')
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'ipsl-cm6a-lr':
-                plt.plot(x_n,y_n,c='#d3d3d3',linestyle='-', alpha=0.6, linewidth=1)
+                plt.plot(x_n,y_n,c='#d3d3d3',linestyle='-', alpha=0.6, linewidth=1.2)
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'mpi-esm1-2-hr':
-                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1)
+                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1.2)
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'mri-esm2-0':
-                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1)
+                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1.2)
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'ukesm1-0-ll':
-                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1)
+                plt.plot(x_n, y_n, c='#d3d3d3', linestyle='-', alpha=0.6, linewidth=1.2)
+
+            elif os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+
+                value_66down = ex_data['low66'].tolist()
+                value_66up = ex_data['up66'].tolist()
+                value_90down = ex_data['low90'].tolist()
+                value_90up = ex_data['up90'].tolist()
+
+                plt.fill_between(x_n, value_90down, value_90up, color='#B39DDB', alpha=0.5,
+                                 label='90% credible interval')
+                plt.fill_between(x_n, value_66down, value_66up, color='#F4C97A', alpha=0.5,
+                                 label='66% credible interval')
 
         plt.legend(loc='upper left')
         plt.ylabel('Permafrost Area  ($10^6\ km^2$)')  # y_label

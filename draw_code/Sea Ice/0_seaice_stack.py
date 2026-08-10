@@ -15,10 +15,10 @@ plt.rcParams['svg.fonttype'] = 'none'
 def one_2_tow(time_list, mena_list):
     if 1850 in time_list:
         index_01 = time_list.index(1850)
-        histroy_time = time_list[0:index_01]
+        histroy_time = np.array(time_list[0:index_01])
         now_time = time_list[index_01:]
 
-        histroy_mean = mena_list[0:index_01]
+        histroy_mean = np.array(mena_list[0:index_01])
         now_mean = mena_list[index_01:]
     else:
         histroy_time = None
@@ -26,7 +26,7 @@ def one_2_tow(time_list, mena_list):
         now_time = time_list
         now_mean = mena_list
 
-    return np.array(histroy_time), np.array(histroy_mean), np.array(now_time), np.array(now_mean)
+    return histroy_time, histroy_mean, np.array(now_time), np.array(now_mean)
 
 def one_2_tow_list(time_list, mena_list):
     if 1850 in time_list:
@@ -105,16 +105,19 @@ if __name__ == "__main__":
         name = os.path.basename(expath).split('_')[0] + ' ($10^6\ KM^2$)'  # Y
 
         ex_data = pd.read_excel(expath)
-        x_axis_data = ex_data['time'].tolist()  # time
-        y_axis_data = ex_data['data'].tolist()  # mean
-
-        x_h, y_h, x_n, y_n = one_2_tow_list(x_axis_data, y_axis_data)
-
-        if x_h is None:
-            x_n = transform_years(x_n, zoom_factor, bias)
+        if os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+            x_axis_data = ex_data['time'].tolist()  # time
+            x_n = transform_years(x_axis_data, zoom_factor, bias)
         else:
-            x_n = transform_years(x_n, zoom_factor, bias)
-            x_h = transform_years(x_h, zoom_factor, bias)
+            x_axis_data = ex_data['time'].tolist()  # time
+            y_axis_data = ex_data['data'].tolist()  # mean
+            x_h, y_h, x_n, y_n = one_2_tow(x_axis_data, y_axis_data)
+
+            if x_h is None:
+                x_n = transform_years(x_n, zoom_factor, bias)
+            else:
+                x_n = transform_years(x_n, zoom_factor, bias)
+                x_h = transform_years(x_h, zoom_factor, bias)
 
         if os.path.basename(expath).split('_')[1].split('.')[0] == 'CESM2':
 
@@ -172,6 +175,10 @@ if __name__ == "__main__":
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'Satellite':
                 plt.plot(x_n, y_n, c='#fea443', linestyle='-', alpha=0.8, linewidth=2,label='NSIDC satellite observation data')
+            elif os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+                value_90down = ex_data['low90'].tolist()
+                value_90up = ex_data['up90'].tolist()
+                plt.fill_between(x_n, value_90down, value_90up,alpha=0.3,hatch='///',color='white',edgecolor='black', label='90% credible interval')
 
         plt.legend(loc='lower left')
         plt.ylabel('Area (10^6 km2)')  # y_label

@@ -109,7 +109,7 @@ font_style = {'family': 'Times New Roman',
 
 ax.fill_between(ages, value_90down, value_90up, alpha=0.4, hatch='///', color='None', edgecolor='black',
                 label="90% credible interval")
-ax.fill_between(ages, 0, median, color='#8d5591', alpha=0.4)
+ax.fill_between(ages, 0, median, color='#8d5591', alpha=0.4,edgecolor='None')
 ax.plot(ages, median, color='#0b0b0b', label='Creel et al. (2023)')
 ax.set_xlim(-7.6, 80)
 plt.gca().invert_xaxis()
@@ -125,7 +125,7 @@ ais_mean1 = (ex_data['Glaciers [mean]']).tolist()
 # start 1950
 ax.plot(year[50:], ais_mean[50:], label='Frederikse et al. (2020)', color='#2626ff')
 ax.fill_between(year[50:], ais_low[50:], ais_high[50:], alpha=0.4, hatch='///', color='None', edgecolor='black')
-ax.fill_between(year[50:], 0, ais_mean[50:], alpha=0.4, color='#8d5591')
+ax.fill_between(year[50:], 0, ais_mean[50:], alpha=0.4, color='#8d5591', edgecolor='None')
 
 th95_Ho = np.percentile(median[1:59], 5)
 th95_Mid = np.percentile(median[25:35], 5)
@@ -141,20 +141,20 @@ y_min, y_max = ais_mean1[-1] - 0.204 * 0.3625, ais_mean1[-1] - 0.043 * 0.3625
 center = (y_min + y_max) / 2
 lower_err = center - y_min
 upper_err = y_max - center
-ax.errorbar(x=[x_pos], y=[center],
-            yerr=[[lower_err], [upper_err]],
-            fmt='none',
-            ecolor='#d57eeb',
-            label='Committed change with credible interval',
-            capsize=5,
-            elinewidth=2)
+# ax.errorbar(x=[x_pos], y=[center],
+#             yerr=[[lower_err], [upper_err]],
+#             fmt='none',
+#             ecolor='#d57eeb',
+#             label='Committed change with credible interval',
+#             capsize=5,
+#             elinewidth=2)
 
 
 current_year = 1950
 bias = 0
 ax.xaxis.set_major_locator(
     ticker.FixedLocator(
-        [bias + 10, bias + 8, bias + 6, bias + 4, bias + 2, bias, bias - 1.5, bias - 2.5, bias - 3.5]))
+        [bias + 10, bias + 8, bias + 6, bias + 4, bias + 2,bias+0.1,bias, bias - 1.5, bias - 2.5, bias - 3.5]))
 
 # Convert the scale values to year labels
 ax.set_xticklabels([
@@ -163,6 +163,7 @@ ax.set_xticklabels([
     str(int(bias + 6)),
     str(int(bias + 4)),
     str(int(bias + 2)),
+    '', # 1850
     str(int(current_year - bias)),
 
     str(int(current_year - (bias - 1.5) * 20)),
@@ -177,7 +178,7 @@ ax.spines['right'].set_color('none')
 ax.spines['top'].set_color('none')
 
 plt.legend(frameon=False)
-plt.axvline(0, c='gray', linestyle='--', alpha=0.5, linewidth=1)
+plt.axvline(0.1, c='gray', linestyle='--', alpha=0.5, linewidth=1)
 
 ax.set_xlim(left=11.7, right=-4)
 plt.gca().yaxis.set_major_locator(ticker.MaxNLocator(5))

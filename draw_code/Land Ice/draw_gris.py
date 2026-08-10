@@ -54,6 +54,15 @@ th95_Ho_66u = np.percentile(value_66up[1:59],5)
 th95_Ho_90d = np.percentile(value_90down[1:59],5)
 th95_Ho_90u = np.percentile(value_90up[1:59],5)
 
+Ho_90_5UP = np.percentile(value_90up[1:59],5)
+Ho_90_5LOW = np.percentile(value_90down[1:59],5)
+mid_90_5up = np.percentile(value_90up[25:35],5)
+mid_90_5low = np.percentile(value_90down[25:35],5)
+print("Ho_90_5up:{}".format(Ho_90_5UP))
+print("Ho_90_5low:{}".format(Ho_90_5LOW))
+print("Mid_90_5up:{}".format(mid_90_5up))
+print("Mid_90_5low:{}".format(mid_90_5low))
+
 th95_Mid = np.percentile(median[25:35],5)
 th95_Mid_66d = np.percentile(value_66down[25:35],5)
 th95_Mid_66u = np.percentile(value_66up[25:35],5)
@@ -83,18 +92,18 @@ ax1.plot(th_time,np.full_like(th_time,th95_Ho),label='Holocene Baseline',color='
 font_style={'family':'Times New Roman',
             'size':10}
 
-x_pos = -3.4
-y_min,y_max = ais_mean1[-1]-0.342*0.3625,ais_mean1[-1]-0.206*0.3625
-center = (y_min + y_max) / 2
-lower_err = center - y_min
-upper_err = y_max - center
-ax1.errorbar(x=[x_pos], y=[center],
-             yerr=[[lower_err], [upper_err]],
-             fmt='none',
-             ecolor='#d57eeb',
-             label='Committed change with credible interval',
-             capsize=5,
-             elinewidth=2)
+# x_pos = -3.4
+# y_min,y_max = ais_mean1[-1]-0.342*0.3625,ais_mean1[-1]-0.206*0.3625
+# center = (y_min + y_max) / 2
+# lower_err = center - y_min
+# upper_err = y_max - center
+# ax1.errorbar(x=[x_pos], y=[center],
+#              yerr=[[lower_err], [upper_err]],
+#              fmt='none',
+#              ecolor='#d57eeb',
+#              label='Committed change with credible interval',
+#              capsize=5,
+#              elinewidth=2)
 
 ax1.set_ylabel('Ice volume (10^6 Gt)',font=font_style)  # y_label
 plt.legend(frameon=False)
@@ -132,7 +141,7 @@ ax1.set_xlim(left=11.7)
 plt.gca().yaxis.set_major_locator(ticker.MaxNLocator(5))
 
 plt.gca().yaxis.set_major_formatter(ticker.StrMethodFormatter('{x:.1f}'))
-plt.show()
-# out_path = r"./Extended Data Fig 1c.svg"
-# plt.savefig(out_path, dpi=500, format='svg')
+# plt.show()
+out_path = r"./Extended Data Fig 1c.svg"
+plt.savefig(out_path, dpi=500, format='svg')
 

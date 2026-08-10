@@ -71,16 +71,20 @@ if __name__ == "__main__":
         name = os.path.basename(expath).split('_')[0] + ' ($10^6\ KM^2$)'  # Y
 
         ex_data = pd.read_excel(expath)
-        x_axis_data = ex_data['time'].tolist()  # time
-        y_axis_data = ex_data['data'].tolist()  # mean
-
-        x_h, y_h, x_n, y_n = one_2_tow(x_axis_data, y_axis_data)
-
-        if x_h is None:
-            x_n = transform_years(x_n, zoom_factor, bias)
+        if os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+            x_axis_data = ex_data['time'].tolist()  # time
+            x_n = transform_years(x_axis_data, zoom_factor, bias)
         else:
-            x_n = transform_years(x_n, zoom_factor, bias)
-            x_h = transform_years(x_h, zoom_factor, bias)
+            x_axis_data = ex_data['time'].tolist()  # time
+            y_axis_data = ex_data['data'].tolist()  # mean
+            x_h, y_h, x_n, y_n = one_2_tow(x_axis_data, y_axis_data)
+
+            # 压缩时间
+            if x_h is None:
+                x_n = transform_years(x_n, zoom_factor, bias)
+            else:
+                x_n = transform_years(x_n, zoom_factor, bias)
+                x_h = transform_years(x_h, zoom_factor, bias)
 
         if os.path.basename(expath).split('_')[1].split('.')[0] == 'CESM2':
 
@@ -135,6 +139,11 @@ if __name__ == "__main__":
 
             elif os.path.basename(expath).split('_')[1].split('.')[0] == 'Era5-Land':
                 plt.plot(x_n, y_n, c='#fea443', linestyle='-', alpha=0.8, linewidth=2,label='ERA5-Land data')
+            elif os.path.basename(expath).split('_')[1].split('.')[0] == 'Credible':
+                value_90down = ex_data['low90'].tolist()
+                value_90up = ex_data['up90'].tolist()
+                plt.fill_between(x_n, value_90down, value_90up, alpha=0.3, hatch='///', color='white',
+                                 edgecolor='black', label='90% credible interval')
 
         plt.legend(loc='lower left')
         plt.ylabel('Snow Area ($10^6\ km^2$)')

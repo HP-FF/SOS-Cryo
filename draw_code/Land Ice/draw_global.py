@@ -174,18 +174,18 @@ if __name__=='__main__':
     th_time = np.array(year[51:] + time)
     ax1.plot(th_time, np.full_like(th_time, th95_Ho), label='Holocene Baseline', color='#ff0001')
 
-    x_pos = -3.4
-    y_min, y_max = g_mean1[-1]-6.546*0.3625, g_mean1[-1]-0.299*0.3625
-    center = (y_min + y_max) / 2
-    lower_err = center - y_min
-    upper_err = y_max - center
-    ax1.errorbar(x=[x_pos], y=[center],
-                 yerr=[[lower_err], [upper_err]],
-                 fmt='none',
-                 ecolor='#d57eeb',
-                 label='Committed change with credible interval',
-                 capsize=5,
-                 elinewidth=2)
+    # x_pos = -3.4
+    # y_min, y_max = g_mean1[-1]-6.546*0.3625, g_mean1[-1]-0.299*0.3625
+    # center = (y_min + y_max) / 2
+    # lower_err = center - y_min
+    # upper_err = y_max - center
+    # ax1.errorbar(x=[x_pos], y=[center],
+    #              yerr=[[lower_err], [upper_err]],
+    #              fmt='none',
+    #              ecolor='#d57eeb',
+    #              label='Committed change with credible interval',
+    #              capsize=5,
+    #              elinewidth=2)
 
     font_style = {'family': 'Times New Roman',
                   'size': 10}

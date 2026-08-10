@@ -152,6 +152,15 @@ if __name__=='__main__':
     value_90up = (median - gap_90down)
     value_90down = (median - gap_90up)
 
+    Ho_90_5UP = np.percentile(value_90up[1:59],5)
+    Ho_90_5LOW = np.percentile(value_90down[1:59],5)
+    mid_90_5up = np.percentile(value_90up[25:35],5)
+    mid_90_5low = np.percentile(value_90down[25:35],5)
+    print("Ho_90_5up:{}".format(Ho_90_5UP))
+    print("Ho_90_5low:{}".format(Ho_90_5LOW))
+    print("Mid_90_5up:{}".format(mid_90_5up))
+    print("Mid_90_5low:{}".format(mid_90_5low))
+
     # ais，mountain，gris
     median_ais_ab = np.array(median_ais) * -0.3625 + 24.7963724799037  # convert absolute ice content
     median_mountain_new_ab = median_mountain_new * -0.3625 + 0.100071730955597
@@ -189,21 +198,21 @@ if __name__=='__main__':
     # 95% line
     time = np.array(time_ais).tolist()
     th_time = np.array(year[51:] + time)
-    ax1.plot(th_time, np.full_like(th_time, th95_Ho), label='Baseline bound', color='#ff0001',linestyle='--')
+    ax1.plot(th_time, np.full_like(th_time, th95_Ho), label='Holocene Baseline', color='#ff0001')
 
 
-    x_pos = -3.4
-    y_min, y_max = g_mean1[-1]-6.546*0.3625, g_mean1[-1]-0.299*0.3625
-    center = (y_min + y_max) / 2
-    lower_err = center - y_min
-    upper_err = y_max - center
-    ax1.errorbar(x=[x_pos], y=[center],
-                 yerr=[[lower_err], [upper_err]],
-                 fmt='none',
-                 ecolor='#d57eeb',
-                 label='Committed change with credible interval',
-                 capsize=5,
-                 elinewidth=2)
+    # x_pos = -3.4
+    # y_min, y_max = g_mean1[-1]-6.546*0.3625, g_mean1[-1]-0.299*0.3625
+    # center = (y_min + y_max) / 2
+    # lower_err = center - y_min
+    # upper_err = y_max - center
+    # ax1.errorbar(x=[x_pos], y=[center],
+    #              yerr=[[lower_err], [upper_err]],
+    #              fmt='none',
+    #              ecolor='#d57eeb',
+    #              label='Committed change with credible interval',
+    #              capsize=5,
+    #              elinewidth=2)
 
     font_style = {'family': 'Times New Roman',
                   'size': 10}
@@ -216,7 +225,7 @@ if __name__=='__main__':
     bias = 0
     ax1.xaxis.set_major_locator(
         ticker.FixedLocator(
-            [bias + 10, bias + 8, bias + 6, bias + 4, bias + 2,bias+0.1,bias, bias - 1.5, bias - 2.5, bias - 3.5]))
+            [bias + 10, bias + 8, bias + 6, bias + 4, bias + 2, bias, bias - 1.5, bias - 2.5, bias - 3.5]))
 
     # Convert the scale values to year labels
     ax1.set_xticklabels([
@@ -225,7 +234,6 @@ if __name__=='__main__':
         str(int(bias + 6)),
         str(int(bias + 4)),
         str(int(bias + 2)),
-        '',                # 1850
         str(int(current_year - bias)),
 
         str(int(current_year - (bias - 1.5) * 20)),
@@ -234,7 +242,6 @@ if __name__=='__main__':
 
         str(int(current_year - (bias - 3.5) * 20))
     ])
-
 
     ax1.spines['right'].set_color('none')
     ax1.spines['top'].set_color('none')
